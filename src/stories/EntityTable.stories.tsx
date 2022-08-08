@@ -26,7 +26,7 @@ const EntityTableDemo = () => {
           ),
         }}
         onDelete={async value => {
-          setData(data.filter(i => i.id != value.id));
+          setData(data.filter(i => i.id !== value.id));
         }}
       >
         <Table.Column dataIndex={'id'} title="ID" />
