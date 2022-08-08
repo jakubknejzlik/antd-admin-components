@@ -16,7 +16,6 @@ import {
   Table,
   TableProps,
 } from 'antd';
-import { ReactNode } from 'react';
 import { ButtonLink, ButtonLinkProps } from './ButtonLink';
 
 interface EntityTableProps<RecordType> extends TableProps<RecordType> {
