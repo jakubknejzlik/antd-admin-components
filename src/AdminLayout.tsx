@@ -1,7 +1,8 @@
 import React, { ReactNode, useState } from 'react';
-// import './AppLayout.css';
 
-// import '@aws-amplify/ui-react/styles.css';
+import 'antd/dist/antd.css';
+import '@aws-amplify/ui-react/styles.css';
+
 import { Breadcrumb, Layout, Menu, Space } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import {
@@ -138,6 +139,28 @@ interface AppLayoutProps {
   footer?: React.ReactNode;
 }
 
+const css = `
+#components-layout-demo-side .logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+.antd-header-content-item {
+  height: 100%;
+  cursor: pointer;
+}
+
+.antd-header-content {
+  float: right;
+  padding: 0px;
+  height: 100%;
+}`;
+
 export function AppLayout(props: AppLayoutProps) {
   const [collapsed, setCollapsed] = useState(false);
   const { structure, header, footer } = props;
@@ -160,43 +183,46 @@ export function AppLayout(props: AppLayoutProps) {
   const breadcrumbItems = getBreadcrumbs(structure, location.pathname);
 
   return (
-    <Layout id="components-layout-demo-side" style={{ minHeight: '100vh' }}>
-      <Layout.Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        // collapsible={true}
-        collapsed={collapsed}
-        onCollapse={value => setCollapsed(value)}
-      >
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          selectedKeys={[defaultOpenKeys[0]]}
-          defaultOpenKeys={defaultOpenKeys}
-          onClick={item => {
-            navigate(item.key);
-          }}
-          items={[...processItems(structure)]}
-        />
-      </Layout.Sider>
-      <Layout className="site-layout">
-        <Layout.Header
-          className="site-layout-background"
-          style={{ padding: 0 }}
+    <>
+      <style>{css}</style>
+      <Layout id="components-layout-demo-side" style={{ minHeight: '100vh' }}>
+        <Layout.Sider
+          breakpoint="lg"
+          collapsedWidth="0"
+          // collapsible={true}
+          collapsed={collapsed}
+          onCollapse={value => setCollapsed(value)}
         >
-          <Space className="antd-header-content">{header}</Space>
-        </Layout.Header>
-        <Layout.Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            {breadcrumbItems}
-          </Breadcrumb>
-          <Routes>{getRoutesFromItems(structure)}</Routes>
-        </Layout.Content>
-        <Layout.Footer style={{ textAlign: 'center' }}>{footer}</Layout.Footer>
+          <div className="logo" />
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={[defaultOpenKeys[0]]}
+            defaultOpenKeys={defaultOpenKeys}
+            onClick={item => {
+              navigate(item.key);
+            }}
+            items={[...processItems(structure)]}
+          />
+        </Layout.Sider>
+        <Layout className="site-layout">
+          <Layout.Header
+            className="site-layout-background"
+            style={{ padding: 0 }}
+          >
+            <Space className="antd-header-content">{header}</Space>
+          </Layout.Header>
+          <Layout.Content style={{ margin: '0 16px' }}>
+            <Breadcrumb style={{ margin: '16px 0' }}>
+              {breadcrumbItems}
+            </Breadcrumb>
+            <Routes>{getRoutesFromItems(structure)}</Routes>
+          </Layout.Content>
+          <Layout.Footer style={{ textAlign: 'center' }}>
+            {footer}
+          </Layout.Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    </>
   );
 }
-
-export default AppLayout;

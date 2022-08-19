@@ -1,6 +1,6 @@
 // import 'antd/dist/antd.css';
 
-export { AppLayout } from './AdminLayout';
+export { AppLayout, Structure } from './AdminLayout';
 export { ButtonLink } from './ButtonLink';
 export { EntityCreateForm } from './EntityCreateForm';
 export { EntityDetail } from './EntityDetail';

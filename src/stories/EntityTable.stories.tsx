@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { EntityTable } from '../EntityTable';
 import { Button, Table } from 'antd';
 
+// import 'antd/dist/antd.css';
+
 const initData = [{ id: 'aa', name: 'bb' }];
 
 const EntityTableDemo = () => {

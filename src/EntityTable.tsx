@@ -9,18 +9,25 @@ import {
   Alert,
   Button,
   Card,
-  CardProps,
   message,
   Popconfirm,
   Space,
   Table,
   TableProps,
 } from 'antd';
+import { ReactNode } from 'react';
 import { ButtonLink, ButtonLinkProps } from './ButtonLink';
 
+type ActionsCellRender<RecordType> = (
+  value: any,
+  record: RecordType,
+  index: number
+) => React.ReactNode;
 interface EntityTableProps<RecordType> extends TableProps<RecordType> {
   error?: Error;
-  card?: CardProps;
+  card?: {
+    title?: ReactNode;
+  };
   onDelete?: (item: RecordType) => Promise<any>;
   buttons?: {
     create?: boolean | ButtonLinkProps;
@@ -28,12 +35,21 @@ interface EntityTableProps<RecordType> extends TableProps<RecordType> {
     edit?: boolean | ButtonLinkProps;
     delete?: boolean;
   };
+  buttonsRender?: ActionsCellRender<RecordType>;
 }
 
-export const EntityTable = <RecordType extends object & { id: string } = any>(
+export const EntityTable = <RecordType extends object = any>(
   props: EntityTableProps<RecordType>
 ) => {
-  const { buttons, card, error, children, onDelete, ...rest } = props;
+  const {
+    buttons,
+    card,
+    error,
+    children,
+    onDelete,
+    buttonsRender,
+    ...rest
+  } = props;
 
   return (
     <Card
@@ -50,7 +66,6 @@ export const EntityTable = <RecordType extends object & { id: string } = any>(
           />
         )
       }
-      {...card}
     >
       {error && <Alert type="error" message={error?.message} />}
       <Table size="small" rowKey="id" {...rest}>
@@ -60,8 +75,9 @@ export const EntityTable = <RecordType extends object & { id: string } = any>(
             align="center"
             width={20}
             title="Actions"
-            render={(_, item: RecordType) => (
+            render={(value, item: RecordType, index) => (
               <Space size={4}>
+                {buttonsRender && buttonsRender(value, item, index)}
                 {(!buttons || buttons.detail) && (
                   <ButtonLink
                     params={item}
@@ -92,11 +108,14 @@ export const EntityTable = <RecordType extends object & { id: string } = any>(
                       } catch (err) {
                         message.error((err as Error).message);
                       }
+                      // refetch();
                     }}
                   >
-                    <Button size="small" danger={true}>
-                      <DeleteOutlined />
-                    </Button>
+                    <Button
+                      size="small"
+                      danger={true}
+                      icon={<DeleteOutlined />}
+                    />
                   </Popconfirm>
                 )}
               </Space>

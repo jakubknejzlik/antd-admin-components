@@ -1,28 +1,38 @@
 import React from 'react';
-import { Alert, Button, Card, Form, message, Result, Spin } from 'antd';
+import {
+  Alert,
+  Button,
+  Card,
+  CardProps,
+  Form,
+  message,
+  Result,
+  Spin,
+} from 'antd';
 import { useState } from 'react';
-import { resolvePath, useLocation, useNavigate } from 'react-router-dom';
+// import { useLocation } from "react-router-dom";
 
 interface EntityEditFormProps<TData> {
   data?: TData;
   loading?: boolean;
   error?: Error;
+  card?: CardProps;
 
   children: React.ReactNode;
 
-  onFinish: (values: TData) => Promise<{ id: string }>;
+  onFinish: (values: TData) => Promise<any>;
 }
 
 export const EntityEditForm = <TData extends object = any>(
   props: EntityEditFormProps<TData>
 ) => {
-  const { data, loading, error, children, onFinish } = props;
+  const { data, loading, error, children, card, onFinish } = props;
   const [saving, setSaving] = useState(false);
-  const navigate = useNavigate();
-  const loc = useLocation();
+  // const navigate = useNavigate();
+  // const loc = useLocation();
 
   return (
-    <Card title="Edit" loading={loading}>
+    <Card title="Edit" loading={loading} {...card}>
       {error && <Alert type="error" message={error?.message} />}
       {loading && <Spin style={{ width: '100%' }} />}
       {!loading && !data && <Result status={'404'} />}
@@ -34,16 +44,16 @@ export const EntityEditForm = <TData extends object = any>(
             try {
               setSaving(true);
               await onFinish(values);
-              navigate(resolvePath(`../`, loc.pathname));
+              // navigate(resolvePath(`../`, loc.pathname));
             } catch (err) {
-              message.error((err as Error).message);
+              message.error(err.message);
             } finally {
               setSaving(false);
             }
           }}
         >
           {children}
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Form.Item>
             <Button type="primary" htmlType="submit" loading={saving}>
               Submit
             </Button>

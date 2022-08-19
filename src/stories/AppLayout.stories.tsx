@@ -3,6 +3,8 @@ import { Meta, Story } from '@storybook/react';
 import { AppLayout } from '..';
 import { BrowserRouter } from 'react-router-dom';
 
+// import 'antd/dist/antd.css';
+
 const meta: Meta = {
   title: 'Layout',
   component: AppLayout,
